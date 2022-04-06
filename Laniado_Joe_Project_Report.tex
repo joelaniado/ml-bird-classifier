@@ -33,6 +33,75 @@ Using the different algorithms learned in class, there is a number of ways to ap
 
 The original dataset consists of pictures from more than 400 different species of birds. This includes 58388 training images, 2000 test images, and 2000 validation images. When it comes to the images themselves; each picture is 224 x 224 x 3 color images in jpg format, and contain only one bird per image. The bird in the image usually takes more than 50\% of the pixels in the image making it convenient for training purposes. All images were collected from the BIRDS 400 dataset found at https://www.kaggle.com/gpiosenka/100-bird-species. One important thing to note is that 85\% of the images are from the male of the species and only 15\% are female, this is due to the male having more colors and features that make them more easily recognizible. For training purposes it makes it more convenient, but this imbalance in our data could present a problem if trying to classify the female bird of the species. \\
 
+\begin{figure}
+    \centering
+    
+    \subfloat[Black Broadbill]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/1BLACK YELLOW BROADBILL/001.JPG}
+    }
+    \subfloat[Flamingo]{
+        \label{ref_label4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/2FLAMINGO/011.JPG}
+    } 
+    \subfloat[Bald Eagle]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/3BALD EAGLE/019.JPG}
+    }
+    \subfloat[Annas Hummingbird]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/4ANNAS HUMMINGBIRD/006.JPG}
+    }
+    \subfloat[Scarlet Macaw]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/5SCARLET MACAW/016.JPG}
+    }\\
+    \subfloat[Abbots Babbler]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/ABBOTTS BABBLER/013.JPG}
+    }
+    \subfloat[Abbots Booby]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/ABBOTTS BOOBY/002.JPG}
+    }
+    \subfloat[Ground Hornbill]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/ABYSSINIAN GROUND HORNBILL/007.JPG}
+    }
+    \subfloat[Crowned Crane]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN CROWNED CRANE/018.JPG}
+    } 
+    \subfloat[Emerald Cuckoo]{
+        \label{ref_label4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN EMERALD CUCKOO/007.JPG}
+    }\\
+    \subfloat[African Firefinch]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN FIREFINCH/006.JPG}
+    }
+    \subfloat[Oyster Catcher]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN OYSTER CATCHER/009.JPG}
+    }
+    \subfloat[Alberts Towhee]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/ALBERTS TOWHEE/021.JPG}
+    }
+    \subfloat[Alexandrine Parakeet]{
+        \label{ref_label4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/ALEXANDRINE PARAKEET/017.JPG}
+    }
+     \subfloat[Touchan]{
+        \label{ref_label4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/6TOUCHAN/013.JPG}
+    }
+    
+    
+    \caption{Selected Species}
+    \label{ref_label_overall}
+\end{figure}
+
 More experiments need to be performed to see the possibility to use as much data for building our models without sacrificing performance. Due to the heavy load of dealing with so many pictures, some measure might need to be adopted when building our models for prototyping purposes. These might be randomly taking a smaller sample of the pictures and/or reducing the number of species that can be identified, in order to make the classifier development more manageble. This will allow us to focus more on the actual implementation and comparison of each approach. 
 
 

@@ -31,17 +31,17 @@ Using the different algorithms learned in class, there is a number of ways to ap
 
 \section{Data Source}
 
-The original dataset consists of pictures from more than 400 different species of birds. This includes 58388 training images, 2000 test images, and 2000 validation images. When it comes to the images themselves; each picture is 224 x 224 x 3 color images in jpg format, and contain only one bird per image. The bird in the image usually takes more than 50\% of the pixels in the image making it convenient for training purposes. All images were collected from the BIRDS 400 dataset found at https://www.kaggle.com/gpiosenka/100-bird-species. One important thing to note is that 85\% of the images are from the male of the species and only 15\% are female, this is due to the male having more colors and features that make them more easily recognizible. For training purposes it makes it more convenient, but this imbalance in our data could present a problem if trying to classify the female bird of the species. \\
+The original dataset consists of pictures from more than 400 different species of birds. This includes 58388 training images, 2000 test images, and 2000 validation images. When it comes to the images themselves; each picture is a 224 x 224 x 3 RGB image in jpg format, and contains only one bird per image. The bird usually takes more than 50\% of the pixels in the image making it convenient for training purposes. All images were collected from the BIRDS 400 dataset found at https://www.kaggle.com/gpiosenka/100-bird-species. One important thing to note is that 85\% of the images are from the male of the species and only 15\% are female, this is due to the male having more colors and features that make them more easily recognizible. Due to the big size of the data 15 different species were selected in order to save time and reduce complexity when implementing each approach for our classifier. More species could be added whenever an optimal classifier is selected. Figure 1 shows the selected species of birds:\\
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     
     \subfloat[Black Broadbill]{
-        \label{ref_label1}
+        \label{ref_lael1}
         \includegraphics[width=0.2\textwidth]{data/birds/train/1BLACK YELLOW BROADBILL/001.JPG}
     }
     \subfloat[Flamingo]{
-        \label{ref_label4}
+        \label{ref_lbel4}
         \includegraphics[width=0.2\textwidth]{data/birds/train/2FLAMINGO/011.JPG}
     } 
     \subfloat[Bald Eagle]{
@@ -57,11 +57,11 @@ The original dataset consists of pictures from more than 400 different species o
         \includegraphics[width=0.2\textwidth]{data/birds/train/5SCARLET MACAW/016.JPG}
     }\\
     \subfloat[Abbots Babbler]{
-        \label{ref_label1}
+        \label{reflabel1}
         \includegraphics[width=0.2\textwidth]{data/birds/train/ABBOTTS BABBLER/013.JPG}
     }
     \subfloat[Abbots Booby]{
-        \label{ref_label2}
+        \label{ref_lbel2}
         \includegraphics[width=0.2\textwidth]{data/birds/train/ABBOTTS BOOBY/002.JPG}
     }
     \subfloat[Ground Hornbill]{
@@ -69,15 +69,15 @@ The original dataset consists of pictures from more than 400 different species o
         \includegraphics[width=0.2\textwidth]{data/birds/train/ABYSSINIAN GROUND HORNBILL/007.JPG}
     }
     \subfloat[Crowned Crane]{
-        \label{ref_label3}
+        \label{rf_label3}
         \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN CROWNED CRANE/018.JPG}
     } 
     \subfloat[Emerald Cuckoo]{
-        \label{ref_label4}
+        \label{ef_label4}
         \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN EMERALD CUCKOO/007.JPG}
     }\\
     \subfloat[African Firefinch]{
-        \label{ref_label2}
+        \label{ref_lael2}
         \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN FIREFINCH/006.JPG}
     }
     \subfloat[Oyster Catcher]{
@@ -85,11 +85,11 @@ The original dataset consists of pictures from more than 400 different species o
         \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN OYSTER CATCHER/009.JPG}
     }
     \subfloat[Alberts Towhee]{
-        \label{ref_label3}
+        \label{ref_labl3}
         \includegraphics[width=0.2\textwidth]{data/birds/train/ALBERTS TOWHEE/021.JPG}
     }
     \subfloat[Alexandrine Parakeet]{
-        \label{ref_label4}
+        \label{ref_labl4}
         \includegraphics[width=0.2\textwidth]{data/birds/train/ALEXANDRINE PARAKEET/017.JPG}
     }
      \subfloat[Touchan]{
@@ -99,18 +99,95 @@ The original dataset consists of pictures from more than 400 different species o
     
     
     \caption{Selected Species}
-    \label{ref_label_overall}
+    \label{selected species}
 \end{figure}
 
-More experiments need to be performed to see the possibility to use as much data for building our models without sacrificing performance. Due to the heavy load of dealing with so many pictures, some measure might need to be adopted when building our models for prototyping purposes. These might be randomly taking a smaller sample of the pictures and/or reducing the number of species that can be identified, in order to make the classifier development more manageble. This will allow us to focus more on the actual implementation and comparison of each approach. 
+The following distribution of pictures applies for each species selected:
+\begin{itemize}
+\item Training: 120
+\item Validation: 5
+\item Testing: 5
+\end{itemize}
 
+The total distribution ends up being 1800 for training, 75 for validation, and 75 for testing. 
 
 \section{Methodology}
+\subsection{Data Pre-Processing}
 
-Data pre-processing will be done before building any of the models by downsampling the images, selecting only a couple of species to classify, and taking a random sample of images from each species. This will be done for prototyping purposes and to focus more on the actual building of each of our models. Once each implementation is validated and tested more data will be included in the overrall training and testing step of each approach. The final results will be presented in the evaluation and final results section. Below we give a quick glance to each proposed methodology to be used for building our image classifier. Furthermore, in-depth analysis of each approach, mathematical explanations, and visual graphs of results; will be provided in the final report. 
+For efficiency purposes each image was resized to be 64x64x3 pixels, they were then vectorized into the form 1x12,288 and collected into three different matrices. One for training, validation, and testing; where each row represented a singular picture, and each column the pixel values. Each matrix was labeled depending on the species it came from and assembled into dictionaries, where the key-value pair was the species name and the specific matrix respectively. It is important to note that the images were not transformed into grayscale due to color being such an important feature when classifying birds. Furthermore, the disparity between male and female specimens was determined that while it would probably introduce some level of error into our model, in this case it would be used to test the generalization to different cases when performing the classification. At least until more data is available.\\
+
+One area of concern was that due to the high variability between picture design, 120 images per species might not be good enough to capture the complexity of poses and states that the bird could present. This would cause our model to overfit and not generalize well when testing new kinds of pictures. To solve this problem, slight data augmention was implemented to increase the number of samples we had. In order to maintain model efficiency while testing different approches, only rotation and flipping were implemented in order to multiply or training images from 1800 to 7200. Operations like cropping, contrast, translation, and more could be used if more training data is needed for future applications. 
 
 \subsection{Dimensionality Reduction}
-For our dimensionality reduction approach we will use principal component analysis to find the most representative features combinations for each species of bird.   We will do this by finding the first n principal components of each species we want to classify, and calculating the projection residual between the eigenspecies and a new image $y$. The lower the residual, the more likely it is that the new bird $y$ belongs to species $k$. A threshold could be implemented as means of determining if a bird is similar enough to be considered any species $k$. We will evaluate the performance of our model by predicting a number of different test images and looking at different classification performance metrics such as precision, recall, F score, and more. Finally, advantages and disadvantages of this approach will be discussed. This implementation is pretty similar to the eigenfaces example presented in class. 
+The first approach implements a dimensionality reduction technique to find the most representative combination of features for each species and then compare it to a test sample to make a classification. We start by defining our training images as a $M$x$N$ matrix X, where $M$ represents the number of samples and $N$ the number of pixels. To better understand the math behind this technique, it is important to know the following concepts:
+
+\begin{enumerate}
+\item The theorem for singular value decomposition states that: $ A_{MxN} = U_{NxN}S_{MxN}V_{NxN}$. Where U and V are orthonormal, $U$ represents the left singular vectors, $S$ the singular values, and $V^T$ the right singular vectors.
+\item We also know that for a NxN matrix W, there exists an eigenvector u if:
+$$ Wu = \lambda u $$ 
+Where $\lambda$ is a scalar that represents the eigenvector of $W$. 
+\end{enumerate}
+
+The basic Idea of this approach is that for each species of bird, we will find the $K$ principal components that encompasses it's most representative features by means of singular value decomposition. Using this ``Eigenbirds'' we will then find the projection residual between each test image and all the $K$ principal components for each species. The test image will be labeled as the type of bird that produces the lowest residual in this equation. 
+
+\begin{enumerate}
+\item We find the mean image $\mu$ for $X$ and use it to center all of our training images. This will help us calculate the covariance matrix C. We will also divide all the data by 255 to scale for computational efficiency. The following operation can be shown as:
+$$ \mu = \frac{1}{m}\sum_{i=0}^{m}X_i $$
+$$ X = (X-\mu)/255 $$
+
+\item We can now define our covariance matrix as $ C = XX^T $ which is a symmetrical matrix that can be diagonilized in the form: 
+$$ C = ULU^T$$ 
+Where U is a matrix of eigenvectors and L is a diagonal matrix with eigenvalues $\lambda_i$- Another approach to calculate the eigenvalues and eigenvectors is to perform SVD on the transpose of our initial matrix X. Furthermore, if we plug our result into C we obtain the relationship between the two methods in calculating our eigenvectors and eigenvalues:
+$$ X^T = USV^T  \rightarrow C = USV^TVSU^T = US^2U^T$$
+In this case U would represent our principal components and $S^2$ our eigenvalues. 
+
+\item Finally, for each test image $y_i$ and each species $j$; we find the projection residual by:
+
+$$ Z_i = (y_i - \mu_j )/255$$
+$$ Projection Residual = || Z_i - U_jU_j^TZ_i ||^2_2 $$
+
+Where $Z_i$ is the centered vector for image $y_i$ using the mean $\mu_j$ of species $j$. After looping through each test image - species combination, the result will be a MxK matrix where each row represents one of $M$ test images and each column the residual when compared to all $K$ species. All is left to do is to find the minimum residual in each row, and that will give us the predicted species for each image. 
+\end{enumerate}
+
+The question remains of choosing how many principal components to use when calculating our projection residual. This can be addresed by plotting the variance percentage for each principal component and selecting the ones that explain most of the variance in the data. In this case, after performing SVD for the first 5 species of birds and getting the respective eigenvalues, each one was scaled between 1 and 0 and converted into percentages. They were then plotted in figure 2 to show the explained variance of each principal components for each species. \\
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Black Broadbill]{
+        \label{ref_labe1}
+        \includegraphics[width=0.33\textwidth]{plots/variance-ANN.jpg}
+    }
+    \subfloat[Flamingo]{
+        \label{ref_labe4}
+        \includegraphics[width=0.33\textwidth]{plots/variance-BAL.jpg}
+    } 
+    \subfloat[Bald Eagle]{
+        \label{ref_labe1}
+        \includegraphics[width=0.33\textwidth]{plots/variance-BLA.jpg}
+    }\\
+    \subfloat[Annas Hummingbird]{
+        \label{ref_labe2}
+        \includegraphics[width=0.33\textwidth]{plots/variance-FLA.jpg}
+    }
+    \subfloat[Scarlet Macaw]{
+        \label{ref_labe3}
+        \includegraphics[width=0.33\textwidth]{plots/variance-SCA.jpg}
+    }
+    
+    \caption{Selected Species}
+\end{figure}
+
+In all the graphs we can see how most of the variance can be explained by the first N principal components. Using this value we calculated the residuals for each one of our test images. The time in seconds from data input to calculating the labels of each test image, was also calculated in order to see the efficiency of the algorithm. The following were the results:
+
+\begin{itemize}
+\item Time for results: 
+\item Accuracy: 
+\item Precission: 
+\item Recall: 
+\item F1-score: 
+\item Confusion matrix and ROC curve:
+\end{itemize}
 
 \subsection{Density Estimation}
 

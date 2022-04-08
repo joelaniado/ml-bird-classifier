@@ -9,7 +9,7 @@
 
 \title{%
 Model Comparison for Bird Species Identification\\
-  \large ISyE 6740 - Spring 2022 Project Proposal}
+  \large ISyE 6740 - Spring 2022 Project Report}
 \author{Team Members: Joe Laniado (GTID: 903233267)}
 
 
@@ -58,39 +58,39 @@ The original dataset consists of pictures from more than 400 different species o
     }\\
     \subfloat[Abbots Babbler]{
         \label{reflabel1}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/ABBOTTS BABBLER/013.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/7ABBOTTS BABBLER/013.JPG}
     }
     \subfloat[Abbots Booby]{
         \label{ref_lbel2}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/ABBOTTS BOOBY/002.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/8ABBOTTS BOOBY/002.JPG}
     }
     \subfloat[Ground Hornbill]{
         \label{ref_label3}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/ABYSSINIAN GROUND HORNBILL/007.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/9ABYSSINIAN GROUND HORNBILL/007.JPG}
     }
     \subfloat[Crowned Crane]{
         \label{rf_label3}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN CROWNED CRANE/018.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AAFRICAN CROWNED CRANE/018.JPG}
     } 
     \subfloat[Emerald Cuckoo]{
         \label{ef_label4}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN EMERALD CUCKOO/007.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AAFRICAN EMERALD CUCKOO/007.JPG}
     }\\
     \subfloat[African Firefinch]{
         \label{ref_lael2}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN FIREFINCH/006.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AAFRICAN FIREFINCH/006.JPG}
     }
     \subfloat[Oyster Catcher]{
         \label{ref_label3}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/AFRICAN OYSTER CATCHER/009.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AAFRICAN OYSTER CATCHER/009.JPG}
     }
     \subfloat[Alberts Towhee]{
         \label{ref_labl3}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/ALBERTS TOWHEE/021.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AALBERTS TOWHEE/021.JPG}
     }
     \subfloat[Alexandrine Parakeet]{
         \label{ref_labl4}
-        \includegraphics[width=0.2\textwidth]{data/birds/train/ALEXANDRINE PARAKEET/017.JPG}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AALEXANDRINE PARAKEET/017.JPG}
     }
      \subfloat[Touchan]{
         \label{ref_label4}
@@ -135,11 +135,70 @@ The basic Idea of this approach is that for each species of bird, we will find t
 $$ \mu = \frac{1}{m}\sum_{i=0}^{m}X_i $$
 $$ X = (X-\mu)/255 $$
 
+If we reshape the mean to it's original dimensions and plot it as an image for each species we get the following:
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Black Broadbill]{
+        \label{ref_labe1}
+        \includegraphics[width=0.2\textwidth]{plots/meanbird-BLA.jpg}
+    }
+    \subfloat[Flamingo]{
+        \label{ref_labe4}
+        \includegraphics[width=0.2\textwidth]{plots/meanbird-FLA.jpg}
+    } 
+    \subfloat[Bald Eagle]{
+        \label{ref_labe1}
+        \includegraphics[width=0.2\textwidth]{plots/meanbird-BAL.jpg}
+    }
+    \subfloat[Annas Hummingbird]{
+        \label{ref_labe2}
+        \includegraphics[width=0.2\textwidth]{plots/meanbird-ANN.jpg}
+    }
+    \subfloat[Scarlet Macaw]{
+        \label{ref_labe3}
+        \includegraphics[width=0.2\textwidth]{plots/meanbird-SCA.jpg}
+    }
+    
+    \caption{1st principal component for each species visualized as a picture.}
+\end{figure}
+
 \item We can now define our covariance matrix as $ C = XX^T $ which is a symmetrical matrix that can be diagonilized in the form: 
 $$ C = ULU^T$$ 
 Where U is a matrix of eigenvectors and L is a diagonal matrix with eigenvalues $\lambda_i$- Another approach to calculate the eigenvalues and eigenvectors is to perform SVD on the transpose of our initial matrix X. Furthermore, if we plug our result into C we obtain the relationship between the two methods in calculating our eigenvectors and eigenvalues:
 $$ X^T = USV^T  \rightarrow C = USV^TVSU^T = US^2U^T$$
-In this case U would represent our principal components and $S^2$ our eigenvalues. 
+In this case U would represent our principal components and $S^2$ our eigenvalues. If we were to grab the first principal component for the 5 species and visualize it, we would get the following result: \\
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Black Broadbill]{
+        \label{ref_labe1}
+        \includegraphics[width=0.2\textwidth]{plots/eigenbird-BLA.jpg}
+    }
+    \subfloat[Flamingo]{
+        \label{ref_labe4}
+        \includegraphics[width=0.2\textwidth]{plots/eigenbird-FLA.jpg}
+    } 
+    \subfloat[Bald Eagle]{
+        \label{ref_labe1}
+        \includegraphics[width=0.2\textwidth]{plots/eigenbird-BAL.jpg}
+    }
+    \subfloat[Annas Hummingbird]{
+        \label{ref_labe2}
+        \includegraphics[width=0.2\textwidth]{plots/eigenbird-ANN.jpg}
+    }
+    \subfloat[Scarlet Macaw]{
+        \label{ref_labe3}
+        \includegraphics[width=0.2\textwidth]{plots/eigenbird-SCA.jpg}
+    }
+    
+    \caption{1st principal component for each species visualized as a picture.}
+\end{figure}
+
+Due to each principal component representing a very small amount of variance only very fine details and combinations of color values con be seen in each image. it may appear random but when put together with the rest of principal components we get a pretty good estimate of the most significant features for each species.\\
+
 
 \item Finally, for each test image $y_i$ and each species $j$; we find the projection residual by:
 
@@ -178,28 +237,102 @@ The question remains of choosing how many principal components to use when calcu
     \caption{Selected Species}
 \end{figure}
 
-In all the graphs we can see how most of the variance can be explained by the first N principal components. Using this value we calculated the residuals for each one of our test images. The time in seconds from data input to calculating the labels of each test image, was also calculated in order to see the efficiency of the algorithm. The following were the results:
+We can see how most of the plots have a similar distribution of variance for each principal component and how around the 100 level mark seems to level off. It was decided that using the first 90 principal components would encompess the most menaingful features of each bird, and would be the parameter used in our model. Therefore, using the first 90 principal components we calculated the residuals for each one of our test images against each species, then by choosing the lowest residual the image was classified respectively. The time it took for the model to run from image input to image classification was taking into account as a measure of model efficiency. It took 3475.41 seconds to complete or around 57.92 minutes. The following were the results: \\
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Classification Metrics]{
+        \label{ref_labe1}
+        \includegraphics[width=0.5\textwidth]{plots/dim-red-results.jpg}
+    }
+    \subfloat[Confusion Matrix]{
+        \label{ref_labe4}
+        \includegraphics[width=0.6\textwidth]{plots/dim-red-cf.jpg}
+    }
+    \caption{Dimensionality Reduction Evaluation.}
+\end{figure} 
 
-\begin{itemize}
-\item Time for results: 
-\item Accuracy: 
-\item Precission: 
-\item Recall: 
-\item F1-score: 
-\item Confusion matrix and ROC curve:
-\end{itemize}
 
 \subsection{Density Estimation}
 
-A different approach for creating our bird classifier could be using density estimation. If we were to divide all of our training pictures into $n$ different clusters, and group together all the images that look similar enough. We could then use a new input image $x$ and classify it calculating the lowest residual between that image and all the different centroids. Each cluster will be assigned the majority label of that specific cluster as its label. Different measures would need to be taken into account to make sure the model performs well. Things like the homogeneity of each cluster and the overrall accuracy of such a model. More experiments need to be performed to determine if a parametric or non-parametric approach would be best in this case for performing clustering. The advantage of this method is that the number of clusters doesn't need to match the number of species, what would matter most would be the homogeneity of each different cluster with respect to the labels of each training image. This would give us the best opportunity for generalization and high predictive accuracy for future tests. 
+Density estimation is another method that can be used to build a species identifier. This method is an unsupervised learning technique that is used to find where similar data clusters together due to having similar features. Clustering is a technique that takes advantage of density estimation through different dimensions for multivariate data. In this case, a non-parametric approach called Kmeans clustering will be used on our training images to find which images are the most similar to each other, in effect creating $D$ clusters that based on certain features each one is classified as a type of bird. Using a new test image $y$, then we can use our model to predict to which cluster y is more similar to. Once assigned to a cluster we calculate the majority label of the cluster given all the data points assigned to it. This will be our new label for image $y$. \\
+
+More specifically, the pre-processed data was used to build our training matrix $A$ where each row represents an image vector, and each column represents the pixel values of said vector. The entire matrix was then scaled by 255 to bound our data between 0 and 1, this was due to simplify computational load when computing the algorithm. The training images were then passed into our Kmeans algorithm which calulates $K$ clusters centroids randomly, and assigns the closes data points to each centroid. Each data point is then labeled based on which centroid is closest to it. The centroids are then recalculated as the average of all the center of all the data points, and the process then repeats iteratively until no there is no change. The dimensions for each data point will be the pixel values for each one of the pictures. The number of clusters will be selected by calculating the model accuracy using a validation set of images in the same matrix format as our training data. Using a range between 15 and 150 clusters in 10 point increments we got the following result on the validation data: \\
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{plots/den-est-valid.jpg}
+    \caption{Accuracy Score by number of clusters using Kmeans.}
+\end{figure}
+
+Using the results in the validation data we can choose the number of clusters that gave the highest score and build our clustering model. For new test images all we have to do is predict to which cluster it would belong to and assign the majority label of that cluster. It is important to note that the number of clusters doesn't need to match the number of species as each cluster can encompass different aspects of the same species. The time it took for the model to run from image input to image classification was taking into account as a measure of model efficiency. It took seconds to complete or around 57.92 minutes and the following were the results: \\
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Classification Metrics]{
+        \label{ref_labe1}
+        \includegraphics[width=0.5\textwidth]{plots/dim-red-results.jpg}
+    }
+    \subfloat[Confusion Matrix]{
+        \label{ref_labe4}
+        \includegraphics[width=0.6\textwidth]{plots/dim-red-cf.jpg}
+    }
+    \caption{Dimensionality Reduction Evaluation.}
+\end{figure} 
+
 
 \subsection{Classification}
+It is intuitive that some of the first approaches when making a classification of labeled data, are the classic supervised learning models that are so popular when using tabular data. Algorithms like SVM, Kernel SVM, K-nearest neighbors, Naive Bayes, Logistic Regression, and many others. In this section some of those algorithms will be implemented and evaluated to find the best traditional approach for creating our bird classifier. \\
 
-In this step we will be building a number of different models using traditional classification methods. KNN, SVM, Kernel SVM, Logistic Regression, and others will be used to create a classifier for our bird species identifier. We will compare them all and discuss the disadvantages and advantages of using each. Classification and model specific metrics will be presented for technique evaluation, and seeing which one is more efficient for the task. Some of this algorithms might be computationally expensive to use due to the big number of data, if this is the case the results will be presented as such and given as a suboptimal solution to our problem. More experiments will be done regarding this case. 
+
+
+ We will compare them all and discuss the disadvantages and advantages of using each. Classification and model specific metrics will be presented for technique evaluation, and seeing which one is more efficient for the task. Some of this algorithms might be computationally expensive to use due to the big number of data, if this is the case the results will be presented as such and given as a suboptimal solution to our problem. More experiments will be done regarding this case. 
 
 \subsection{Deep Learning}
+Our final approach consists of diving into the field of deep learning for image classification. Deep learning is a subfield of machine learning that specializes on reproducing the way the human brain thinks to solve certain problems. It does this by using artificial neural networks; a mathematical representation of a composition of neurons signaling to each other. This field has proven to have an endless number of real life applications when it comes to using data to gain insight on an input. In this case, we will implement a variation of this approach called a convolutional neural network. This algorithm is specifically designed to deal with the high dimensionality that images present. It is important to note that for an 64x64x3 image the number of dimensions that each alogrithm has to take into account is 12,288, combined with more than 7000 distinct training images we get more than 80,000,000 distinct values that need to be taken into account. Performing the neccesary computations to learn from the data becomes a tedious and long task to do in a normal computer. CNNs solve this issue by taking advantage of two ideas: Convolutions and subsampling. Convolution is the process of extracting the high level features of an image through the use of a filter, for each feature we perform subsampling to reduce the spatial size of the convolved feature to reduce the computational power necessary for the algorithm to work. We alternate between this two methods in the form of layers until we come out with an output that has been trained to understand the features of each species. this output will be flattened into a vector and fed into a traditional feed forward neural network to make our classification. Due to this small amount of training images we might have a tendency to overfit to our training data and fail to generalize properly when validating our model. To prevent this, some neurons will be turn off randomly during the training process to prevent the network becoming too dependent in the data. This concept is known as dropout as is used as a regularization tool when using CNNs. \\
 
-Deep learning is a subfield of machine learning that specializes on reproducing the way the human brain thinks to solve certain problems. It does this by using artificial neural networks; a mathematical representation of a composition of neurons signaling to each other. This algorithm has proven to have an endless number of real life applications when it comes to using data to gain insight on an input. In this case, we will implement a variation of this approach called a convolutional neural network. The specific inner workings of this type of network will be discussed and we will do an implementation applied to our training data using the keras library in python. We will use the dropout method to prevent overfitting, and validation to find the optimal parameters for our model. We will use classification metrics to evaluate the quality of our algorithm and the time it takes to produce an output as well. 
+For this approach the training data was reshaped into a 4 dimensional matrix of shape Mx64x64x3 to serve as an input to our network. One-hot encoding was performed to each of our training labels as well to transform it into a 1 dimensional vector which combined between all the training images gives us a matrix of size MxK, where each row represents the label vector of each training image and each column the species that it belongs to. For our network, each layer consisted of a convolution step, a leaky relu activation function to capture non-linear relationships, and a max pooling step that serves as our subsampling for that layer. Dropout was implemented aswell after each layer and finally a dense layer was added to input our flatten data and make our classification. The summary of the network can be seen below: \\
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{plots/dim-red-cf.jpg}
+    \caption{Dimensionality Reduction Evaluation.}
+\end{figure} 
+
+A batch size of 64 was specified and the network was set up to run for 20 epochs. The network was set up to calculate accuracy as well as loss of the network on a validation set at each epoch. This data was saved and plotted for evaluation purposes. The following is the result: \\
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Classification Metrics]{
+        \label{ref_labe1}
+        \includegraphics[width=0.5\textwidth]{plots/dim-red-results.jpg}
+    }
+    \subfloat[Confusion Matrix]{
+        \label{ref_labe4}
+        \includegraphics[width=0.6\textwidth]{plots/dim-red-cf.jpg}
+    }
+    \caption{Dimensionality Reduction Evaluation.}
+\end{figure} 
+
+Finally, we evaluate our model on the test data and plot the results: \\
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Classification Metrics]{
+        \label{ref_labe1}
+        \includegraphics[width=0.5\textwidth]{plots/dim-red-results.jpg}
+    }
+    \subfloat[Confusion Matrix]{
+        \label{ref_labe4}
+        \includegraphics[width=0.6\textwidth]{plots/dim-red-cf.jpg}
+    }
+    \caption{Dimensionality Reduction Evaluation.}
+\end{figure}
+
+
 
 \section{Evaluation and Final Results}
 

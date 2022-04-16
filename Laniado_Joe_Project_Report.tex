@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{array}
+\usepackage[title]{appendix}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 
 
@@ -205,7 +206,7 @@ The question remains on choosing how many principal components $K$ to use when c
         \includegraphics[width=0.4\textwidth]{plots/variance-SCA.jpg}
     }
     
-    \caption{Selected Species}
+    \caption{Variance explained by principal components.}
 \end{figure} 
 
 All 5 plots show a similar distribution of the explained variance per eigenbird for each species. In each graph the amount of variance seems to level off around the 180 - 200 mark, meaning that this range of values serve as a good cutoff to separate the most meaningful features for each bird. In this case a reasonable value for $K$ would be to select the first 180 components. Therefore, by implementing our approach using this value of $K$ and calculating the residuals for each test image, we can classify each sample simply by selecting the lowest value when compared to each species. The time it took for the model to train and run from image input to image classification was taking into account as a measure of model efficiency. It took 3475.41 seconds to complete or around 57.92 minutes. The following were the results: 
@@ -236,7 +237,7 @@ The methodology itself consists of using the pre-processed data to build our tra
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{plots/den-est-valid2.jpg}
-    \caption{Accuracy Score by number of clusters using Kmeans.}
+    \caption{Total sum of squares distances to centroids.}
 \end{figure}
 
 Our plot does not seem to have a clear elbow where the number of clusters seems to have a big reduction on the distance to each centroid. This might mean that our algorithm is failling to capture the relationship between the images well. One possible reason might be due to our data having a non-linear relationship that kmeans can't account for. Another might be due to the curse of dimensionality; which explains that as the number of dimensions in our data increases, euclidian distance does not become a good metric to perform the separation of the data. Nonetheless, Let's select an arbitrary middle value in our plot and evaluate our test data to see the results. We perform our approach in order to classify our test data using Kmeans and a value of 150 for $C$. The model training and classification operation took aproximitely 622 seconds and gave the following result:\\
@@ -252,7 +253,7 @@ Our plot does not seem to have a clear elbow where the number of clusters seems 
         \label{ref_labe4}
         \includegraphics[width=0.6\textwidth]{plots/den-est-cf.jpg}
     }
-    \caption{Dimensionality Reduction Evaluation.}
+    \caption{Density Estimation results.}
 \end{figure} 
 
 A much lower accuracy score compared to other approaches, some potential fixes to inrease this value might be to experiment with other clustering approaches that better capture the non-linear nature of the data or appling dimensionality reduction to curve the curse of dimensionality. \\
@@ -275,7 +276,7 @@ It is intuitive that some of the first approaches to try when making an image cl
 	 Kernel SVM& 0.70 & 0.68 \\
 	 \hline
    \end{tabular} \\
-   \caption{Dimensionality Reduction Evaluation.}
+   \caption{Model evaluations}
 \end{table}
 
 Due to one fifth of our training data being used for validation purposes the scores might be lower than when the whole training data is used when building our best model to classify our test set. Out of all the models evaluated Kernel SVM proved to be the best when combined with a linear dimensionality reduction technique. This is due to the non-linear nature of this approach being able to capture the complexity of the different patterns present in each image better. KNN while non-linear, suffers from the curse of dimensionality as Kmeans did giving it a much lower accuracy score than the other methods. Logistic regression and linear SVM had very similar scores when trying to capture the linear relationship in the data. Using our best performing approach now we can evaluate or test data to get the following classification metrics:
@@ -296,18 +297,26 @@ Due to one fifth of our training data being used for validation purposes the sco
 
  So far, kernel SVM has proven to be the best method to build our bird identifier. The time it took to train and predict ended up being 399 seconds; much faster than our second best performing approach as well. \\
 
-\subsection{Deep Learning}
-Our final approach consists of diving into the field of deep learning for image classification. Deep learning is a subfield of machine learning that specializes on reproducing the way the human brain thinks to solve certain problems. It does this by using artificial neural networks; a mathematical representation of a composition of neurons signaling to each other. This field has proven to have an endless number of real life applications when it comes to using data to gain insight on an input. In this case, we will implement a variation of this approach called a convolutional neural network. This algorithm is specifically designed to deal with the high dimensionality that images present. It is important to note that for an 64x64x3 image the number of dimensions that each alogrithm has to take into account is 12,288, combined with more than 7000 distinct training images we get more than 80,000,000 distinct values that need to be taken into account. Performing the neccesary computations to learn from the data becomes a tedious and long task to do in a normal computer. CNNs solve this issue by taking advantage of two ideas: Convolutions and subsampling. Convolution is the process of extracting the high level features of an image through the use of a filter, for each feature we perform subsampling to reduce the spatial size of the convolved feature to reduce the computational power necessary for the algorithm to work. We alternate between this two methods in the form of layers until we come out with an output that has been trained to understand the features of each species. this output will be flattened into a vector and fed into a traditional feed forward neural network to make our classification. Due to this small amount of training images we might have a tendency to overfit to our training data and fail to generalize properly when validating our model. To prevent this, some neurons will be turn off randomly during the training process to prevent the network becoming too dependent in the data. This concept is known as dropout as is used as a regularization tool when using CNNs. \\
+\subsection{Deep Learning} 
 
-For this approach the training data was reshaped into a 4 dimensional matrix of shape Mx64x64x3 to serve as an input to our network. One-hot encoding was performed to each of our training labels as well to transform it into a 1 dimensional vector which combined between all the training images gives us a matrix of size MxK, where each row represents the label vector of each training image and each column the species that it belongs to. For our network, each layer consisted of a convolution step, a leaky relu activation function to capture non-linear relationships, and a max pooling step that serves as our subsampling for that layer. Dropout was implemented aswell after each layer and finally a dense layer was added to input our flatten data and make our classification. The summary of the network can be seen below: \\
+Our final approach consists of diving into the field of deep learning for image classification. Deep learning is a subfield of machine learning that specializes on reproducing the way the human brain thinks to solve certain problems. It does this by using artificial neural networks; a mathematical representation of a composition of neurons signaling to each other. This field has proven to have an endless number of real life applications when it comes to using data to gain insight on an input. In this case, we will implement a variation of this approach called a convolutional neural network. This algorithm is specifically designed to deal with the high dimensionality that images present. It is important to note that for an 64x64x3 image the number of dimensions that each alogrithm has to take into account is 12,288, combined with more than 5,880 distinct training images we get more than 72,000,000 distinct values that need to be taken into account. Performing the necessary computations to learn from the data becomes a tedious and long task to do in a normal computer. CNNs solve this issue by taking advantage of two ideas: Convolutions and subsampling. Convolution is the process of extracting the high level features of an image through the use of a filter, for each feature we perform subsampling to reduce the spatial size of the convolution to reduce the computational power necessary for the algorithm to work. We alternate between this two methods in the form of layers until we come out with an output that has been trained to understand the features of each species. this output will be flattened into a vector and fed into a dense traditional feed forward neural network to make our classification. Due to this small amount of training images we might have a tendency to overfit to our training data and fail to generalize properly when validating our model. To prevent this, some neurons will be turn off randomly during the training process to prevent the network becoming too dependent in the data. This concept is known as dropout and is used as a regularization technique when using CNNs. \\
 
-\begin{figure}[p]
+For this approach the training data was reshaped into a 4 dimensional matrix of shape Mx64x64x3 to serve as an input to our network. One-hot encoding was performed to each of our training labels as well to transform it into a 1 dimensional vector which combined between all the training images gives us a matrix of size MxK, where each row represents the label vector of each training image and each column the species that it belongs to. For our network, The implementation was done using the Keras library to build our network sequentially; each layer consisted of a convolution step, a leaky relu activation function to capture non-linear relationships, and a max pooling step that serves as our subsampling for that layer. Dropout was implemented aswell after each layer to prevent overfitting and finally a dense layer was added to input our flatten data and make our classification. The summary of the network can be seen below (figure 9): 
+
+\pagebreak
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{plots/CNN-structure.jpg}
+    \includegraphics[width=0.68\textwidth]{plots/CNN-structure.jpg}
     \caption{CNN Architecture.}
 \end{figure} 
 
-A batch size of 64 was specified and the network was set up to run for 20 epochs. The network was set up to calculate accuracy as well as loss of the network on a validation set at each epoch. This data was saved and plotted for evaluation purposes. The following is the result: \\
+\bigskip
+\bigskip
+
+A batch size of 64 was specified and the network was set up to run for 20 epochs for training purposes. The network was set up to calculate accuracy as well as loss of the network on both the validation set and the training data at each epoch. The results of this process was saved and plotted against the number of epochs to visualize the learning process as well as to check for overfitting in our model. Figure 10 shows the result of the previous step: \\
+
+\pagebreak
 
 \begin{figure}[h]
     \centering
@@ -323,29 +332,210 @@ A batch size of 64 was specified and the network was set up to run for 20 epochs
     \caption{CNN validation by epoch}
 \end{figure} 
 
-Finally, we evaluate our model on the test data and plot the results: \\
+These plots shows us good performance and little overfitting. Using our trained network we can now evaluate our test data and see the results in figure 11: 
 
 \begin{figure}[h]
     \centering
     
     \subfloat[Classification Metrics]{
         \label{ref_labe1}
-        \includegraphics[width=0.5\textwidth]{plots/CNN-results.jpg}
+        \includegraphics[width=0.55\textwidth]{plots/CNN-results.jpg}
     }
     \subfloat[Confusion Matrix]{
         \label{ref_labe4}
-        \includegraphics[width=0.5\textwidth]{plots/dim-red-cf.jpg}
+        \includegraphics[width=0.6\textwidth]{plots/deep-learn-cf.jpg}
     }
     \caption{CNN results on test data.}
 \end{figure}
 
-
+This implemation took 675 seconds to train and make our prediction. While loger than our next best approach, this method proved to be the most accurate when building our bird classifier between all the different methods presented in our experiments. Even with the lack of training data this approach was able to generalize extremely well when presented with a new test set independent of our training samples. \\
 
 \section{Evaluation and Final Results}
 
-In this final section the most meaningful metrics from each one of the 4 applied techniques will be presented and compared. Further discussion on the performance of each and further aplications will be mentioned. Testing with a higher number of data will also be performed at this stage to see how the best technique generalizes when presented with a more real world example. Using our better perfoming approach, we will build our bird species identifier and give the final evaluation metrics of it's implementation. If good results are obtained from initial experiments and no big issues arise while developing each one of the models, a video classifier that takes one frame every $j$ frames and which outputs a label if a bird appears in one of them, might be a good real life implementation of our optimal approach. This will only be done if the scope of this project doesn't prove to be too heavy on one person. If not, scalibility and further possibilities will also be discussed in the conclusion section. 
+Out of all approaches presented the results of the most optimal technique in each category can be summarized in the following table:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ |M{2.5cm}|M{2cm}|M{2cm}|}
+	 \hline
+	 Model & Accuracy&Time(s)\\
+	 \hline
+	 Eigenbirds & 0.86 &  3475.41  \\
+	 Kmeans & 0.54 & 622 \\
+	 PCA/KSVM & 0.91 & 399 \\
+	 CNN & 0.97 & 675 \\
+	 \hline
+   \end{tabular} \\
+   \caption{Overrall results.}
+\end{table}
+
+The time column is in seconds and it encompasses both training time and performing the classification on the testing set. Convolutional neural networks proved to be the most accurate approach and the best one in capturing the complex differences of different pictures of species of birds. PCA combined with a kernel SVM proved to be the fastest by almost half, becoming a good second option to perform in case efficiency is the priority when building the classifier. \\
 
 
 
+Using our most optimal model we can now use it on a bigger set of data in order to identify as many species as possible. We will use a CNN in order to classify between 30 different species of birds for our final test. The model will be trained using the same methodology applied on the prototyping stage. Data augmentation will be used in the data in order to increase our training samples to be around 1080 pictures per species, the amount of pictures used for validation and testing will remain the same as in the prototyping stage. Using our new data we can train, validate, and test our model to get the results shown in figure 12 and 13. A picture example of each of the 30 species used can be seen on appendix A. Even though we increased the number of species to 30, the model still performed extremely well with an accuracy of 93\%. \\
+
+This implementation proved to be robust even with the small sample of training data used to build our model. The time for training and classification increased only by around 3000 seconds or 50 minutes, but given the scope of the data this could be considered an acceptable efficiency. Further applications and scalibility could be applied to this method as well. More species could be added and other data augmentation techniques could be used in order to compensate with the low amount of samples for our training images. A real time video classifier could also be implemented by checking frame by frame and classifying the birds present in the video using our model. \\ \\
+
+A more specific look into the classification matrix of our model can be seen below:
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.7\textwidth]{plots/CNN-results_final.jpg}
+    \caption{CNN results on test data.}
+\end{figure}
+
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=1\textwidth]{plots/deep-learn-cf_final.jpg}
+    \caption{CNN results on test data.}
+\end{figure}
+
+\pagebreak
+
+In conclusion there exists many different approaches that can be implemented for image classification, it is a matter of finding the right combinations of tools and methodologies to accomplish the specific task that best would solve your problem. In this case we were able to build a quick and efficient bird species identifier implementing several distinct ideas that provided us with a range of different results, some better than others. Overrall the exploration of all this methodologies does a good job of proving there are many roads that could lead to your desired destination, it is only a matter of finding the one that fits the best.
+
+
+\begin{appendices}
+\section{30 Evaluated Species}
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Black Broadbill]{
+        \label{ref_lael1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/1BLACK YELLOW BROADBILL/001.JPG}
+    }
+    \subfloat[Flamingo]{
+        \label{ref_lbel4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/2FLAMINGO/011.JPG}
+    } 
+    \subfloat[Bald Eagle]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/3BALD EAGLE/019.JPG}
+    }
+    \subfloat[Annas Hummingbird]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/4ANNAS HUMMINGBIRD/006.JPG}
+    }
+    \subfloat[Scarlet Macaw]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/5SCARLET MACAW/016.JPG}
+    }\\
+    \subfloat[Ground Hornbill]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/9ABYSSINIAN GROUND HORNBILL/007.JPG}
+    }
+     \subfloat[Touchan]{
+        \label{ref_label4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/6TOUCHAN/013.JPG}
+    }
+    \subfloat[Crowned Crane]{
+        \label{ref_lael1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AAFRICAN CROWNED CRANE/017.JPG}
+    }
+    \subfloat[Firefinch]{
+        \label{ref_lbel4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AAFRICAN FIREFINCH/006.JPG}
+    } 
+    \subfloat[Alexandrine parakeet]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/AALEXANDRINE PARAKEET/017.JPG}
+    } \\
+    \subfloat[Abbotts Babler]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BABBOTTS BABBLER/013.JPG}
+    }
+    \subfloat[Abbotts Booby]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BABBOTTS BOOBY/002.JPG}
+    }
+    \subfloat[Emerald Cuckoo]{
+        \label{ref_lael1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BAFRICAN EMERALD CUCKOO/053.JPG}
+    }
+    \subfloat[Oyster Catcher]{
+        \label{ref_lbel4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BAFRICAN OYSTER CATCHER/009.JPG}
+    } 
+    \subfloat[Alberts Towhee]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BALBERTS TOWHEE/016.JPG}
+    } \\
+    
+     \caption{Selected Species part 1}
+    \label{selected species}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    
+    \subfloat[Black Swan]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BBLACK SWAN/011.JPG}
+    }
+    \subfloat[Emu]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BEMU/012.JPG}
+    }
+    \subfloat[Magpie]{
+        \label{ref_lael1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BEURASIAN MAGPIE/016.JPG}
+    }
+    \subfloat[Kiwi]{
+        \label{ref_lbel4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BKIWI/061.JPG}
+    } 
+    \subfloat[Mallard Duck]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BMALLARD DUCK/001.JPG}
+    } \\
+    \subfloat[Mandrin Duck]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BMANDRIN DUCK/001.JPG}
+    }
+    \subfloat[Ocellated Turkey]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BOCELLATED TURKEY/001.JPG}
+    }
+    \subfloat[Osprey]{
+        \label{ref_lael1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BOSPREY/001.JPG}
+    }
+    \subfloat[Peacock]{
+        \label{ref_lbel4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BPEACOCK/007.JPG}
+    } 
+    \subfloat[Falcon]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BPEREGRINE FALCON/019.JPG}
+    } \\
+    \subfloat[Quetzal]{
+        \label{ref_label2}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BQUETZAL/014.JPG}
+    }
+    \subfloat[Honey Creeper]{
+        \label{ref_label3}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BRED HONEY CREEPER/001.JPG}
+    }
+    \subfloat[Dove]{
+        \label{ref_lael1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BROCK DOVE/013.JPG}
+    }
+    \subfloat[Blue Magpie]{
+        \label{ref_lbel4}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BSRI LANKA BLUE MAGPIE/030.JPG}
+    } 
+    \subfloat[Troupial]{
+        \label{ref_label1}
+        \includegraphics[width=0.2\textwidth]{data/birds/train/BVENEZUELIAN TROUPIAL/019.JPG}
+    } \\
+  
+    \caption{Selected Species part 2}
+    \label{selected species}
+    
+\end{figure}
+\end{appendices}
 \end{singlespace}
 \end{document}
